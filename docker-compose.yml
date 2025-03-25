@@ -1,0 +1,8 @@
+name: BabyTracker
+services:
+    babytracker:
+        tty: true
+        stdin_open: true
+        ports:
+            - 8000:8000
+        image: babytracker

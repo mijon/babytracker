@@ -18,15 +18,20 @@
       <ul class="nav nav-underline">
           <li class="nav-item"><a class="nav-link" href="{{ url_for('changes.index') }}">Changes</a></li>
       </ul>
+      <ul class="nav nav-underline">
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('medication.index') }}">Medication</a></li>
+      </ul>
 </nav>
-<section class="content">
+<section class="content container-fluid">
   <header>
     {% block header %}{% endblock %}
   </header>
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
   {% endfor %}
-  {% block content %}{% endblock %}
+      <div class="container-fluid">
+        {% block content %}{% endblock %}
+      </div>
 </section>
   </body>
 </html>

@@ -33,6 +33,9 @@ def create_app(test_config = None):
     from . import changes
     app.register_blueprint(changes.bp)
 
+    from . import medication
+    app.register_blueprint(medication.bp)
+
     return app
 
 

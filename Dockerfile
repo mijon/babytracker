@@ -6,5 +6,7 @@ RUN pip install -r /requirements.txt
 COPY . /app
 WORKDIR /app
 
+CMD ["flask", "--app", "babytracker", "init-db"]
+
 EXPOSE 8000
 CMD ["gunicorn", "--config", "gunicorn_config.py", "babytracker.manage:gunicorn_app"]

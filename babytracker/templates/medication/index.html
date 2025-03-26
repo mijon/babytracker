@@ -6,4 +6,48 @@
 {% block content %}
 <p>This is a page for Medication for mum, e.g. pain relief etc<p>
 <p>Will need interface to add types of medication including minimum time between doses, and then an interface for logging when those medications were taken. The logging interface should be higher on the page than the new medication interface.</p>
+
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Medication Tracker</h5>
+    <form method="post">
+      <label class="form-label" for="medication-take-name">Medication to Log</label>
+      <div class="mb-3">
+        <select class="form-select" id="medication-take-name">
+          {% for medication in medications %}
+          <option value={{medication}}>{{medication}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <!-- <div class="mb-3"> -->
+      <!--   <label for="medication-take-datetime" class="form-label">Taken when</label> -->
+      <!--   <input type="datetime-local" id="medication-take-datetime" name="medication-take-datetime"> -->
+      <!-- </div> -->
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-body">
+    <h5 class="card-title">Add Medication</h5>
+    <form method="post">
+      <div class="mb-3">
+        <label for="medication-name" class="form-label">Medication Name</label>
+        <input type="text" class="form-control" id="medication-name" placeholder="e.g. Paracetemol">
+      </div>
+      <label class="form-label">Minimum time between doses</label>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="4" id="duration-number">
+        <select class="form-select" id="dutation-text">
+          <option value="minutes">Minutes</option>
+          <option value="hours">Hours</option>
+          <option value="days">Days</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </form
+  </div>
+</div>
+
 {% endblock %}

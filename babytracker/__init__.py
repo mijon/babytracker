@@ -3,6 +3,7 @@ from flask import Flask
 from flask import render_template
 
 
+
 def create_app(test_config = None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
@@ -20,8 +21,6 @@ def create_app(test_config = None):
     except OSError:
         pass
 
-    # TODO: make the db
-
 
     @app.route("/")
     def hello_world():
@@ -35,6 +34,12 @@ def create_app(test_config = None):
 
     from . import medication
     app.register_blueprint(medication.bp)
+
+    from . import sleeps
+    app.register_blueprint(sleeps.bp)
+
+    from . import db
+    db.init_app(app)
 
     return app
 

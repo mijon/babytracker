@@ -4,5 +4,41 @@
 {% endblock %}
 
 {% block content %}
-<p>This is a page for handling changes<p>
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Log Change</h5>
+    <form method="post">
+      <div class="mb-3">
+      <input type="radio" class="btn-check" name="change-options" id="change-wet" autocomplete="off" checked value="wet">
+      <label class="btn" for="change-wet">Wet</label>
+
+      <input type="radio" class="btn-check" name="change-options" id="change-dirty" autocomplete="off" value="dirty">
+      <label class="btn" for="change-dirty">Dirty</label>
+
+      <input type="radio" class="btn-check" name="change-options" id="change-both" autocomplete="off" value="both">
+      <label class="btn" for="change-both">Both</label>
+      </div>
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Change Log</h5>
+    <table class="table">
+      <tr>
+        <th>Date and time</th>
+        <th>Nappy State</th>
+      </tr>
+      {% for change in changes %}
+      <tr>
+        <td>{{ change["change_time"].strftime("%Y-%m-%d %H:%M") }}</td>
+        <td>{{ change["change_type"] }}</td>
+      </tr>
+      {% endfor %}
+      </tr>
+    </table>
+  </div>
+</div>
 {% endblock %}

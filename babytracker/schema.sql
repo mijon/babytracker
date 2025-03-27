@@ -36,4 +36,8 @@ CREATE TABLE medications_log (
 	FOREIGN KEY (medication) REFERENCES medications (id)
 );
 
-
+CREATE TABLE changes (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	change_type VARCHAR(10) NOT NULL,
+	change_time TIMESTAMP NOT NULL
+);

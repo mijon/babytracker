@@ -1,8 +1,28 @@
-from flask import (Blueprint, g, render_template)
+from flask import (Blueprint, render_template, request, url_for, redirect)
+from babytracker.db import get_db
+from datetime import datetime
 
-bp = Blueprint("changes", __name__, url_prefix = "/changes")
+bp = Blueprint("changes", __name__, url_prefix="/changes")
 
-@bp.route("/")
+
+@bp.route("/", methods=("GET", "POST"))
 def index():
-    return render_template("changes/index.html")
+    db = get_db()
 
+    if request.method == "POST":
+        change_type = request.form["change-options"]
+
+        timestamp = datetime.now().isoformat()
+        db.execute(
+            "INSERT INTO changes (change_type, change_time)"
+            " VALUES (?, ?)",
+            (change_type, timestamp))
+        db.commit()
+        return redirect(url_for("changes.index"))
+
+    changes = db.execute(
+        "SELECT change_type, change_time from changes ORDER BY id DESC"
+    ).fetchall()
+    print(changes)
+
+    return render_template("changes/index.html", changes=changes)

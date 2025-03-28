@@ -30,18 +30,22 @@
 <div class="card mt-3">
   <div class="card-body">
     <h5 class="card-title">Medication Log</h5>
-    <table class="table">
-      <tr>
-        <th>Medication</th>
-        <th>Time</th>
-      </tr>
-      {% for med in medication_log %}
-      <tr>
-        <td>{{ med["medication"] }}</td>
-        <td>{{ med["taken_date"].strftime("%Y-%m-%d %H:%M") }}</td>
-      </tr>
-      {% endfor %}
-      </tr>
+    <table id="data" class="table">
+      <thead>
+        <tr>
+          <th>Medication</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for med in medication_log %}
+        <tr>
+          <td>{{ med["medication"] }}</td>
+          <td>{{ med["taken_date"].strftime("%Y-%m-%d %H:%M") }}</td>
+        </tr>
+        {% endfor %}
+        </tr>
+      </tbody>
     </table>
   </div>
 </div>
@@ -68,4 +72,12 @@
   </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+  </script>
 {% endblock %}

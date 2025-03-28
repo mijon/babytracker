@@ -26,19 +26,30 @@
 <div class="card">
   <div class="card-body">
     <h5 class="card-title">Change Log</h5>
-    <table class="table">
-      <tr>
-        <th>Date and time</th>
-        <th>Nappy State</th>
-      </tr>
+    <table id="data" class="table">
+      <thead>
+        <tr>
+          <th>Date and time</th>
+          <th>Nappy State</th>
+        </tr>
+      </thead>
+      <tbody>
       {% for change in changes %}
       <tr>
         <td>{{ change["change_time"].strftime("%Y-%m-%d %H:%M") }}</td>
         <td>{{ change["change_type"] }}</td>
       </tr>
       {% endfor %}
-      </tr>
+      </tbody>
     </table>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+  </script>
 {% endblock %}

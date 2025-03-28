@@ -23,6 +23,5 @@ def index():
     changes = db.execute(
         "SELECT change_type, change_time from changes ORDER BY id DESC"
     ).fetchall()
-    print(changes)
 
     return render_template("changes/index.html", changes=changes)

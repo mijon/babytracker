@@ -1,25 +1,17 @@
-DROP TABLE IF EXISTS feed_sessions;
-DROP TABLE IF EXISTS feed_subsessions;
+DROP TABLE IF EXISTS feeds;
 DROP TABLE IF EXISTS sleeps;
 DROP TABLE IF EXISTS changes;
 
 DROP TABLE IF EXISTS medications;
 DROP TABLE IF EXISTS medications_log;
 
-CREATE TABLE feed_sessions (
+CREATE TABLE feeds (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	start_time TIMESTAMP NOT NULL,
 	stop_time TIMESTAMP NOT NULL,
+	breast VARCHAR(5) NOT NULL,
+	duration INTEGER NOT NULL,
 	notes TEXT
-);
-
-CREATE TABLE feed_subsessions (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	session_id INTEGER,
-	breast CHAR(1),
-	start_time TIMESTAMP NOT NULL,
-	stop_time TIMESTAMP NOT NULL,
-	FOREIGN KEY (session_id) REFERENCES feed_sessions (id)
 );
 
 CREATE TABLE medications (

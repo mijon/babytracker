@@ -4,12 +4,11 @@
 {% endblock %}
 
 {% block content %}
-<p>This is a page for handling feeds<p>
 
 <div class="card">
   <div class="card-body">
     <h5 class="card-title">Test</h5>
-      <div id="timer">
+      <div id="timer" class="h2 text-center">
         <span class="digit" id="hr">00</span>
         <span class="txt"> : </span>
         <span class="digit" id="min">00</span>
@@ -19,10 +18,58 @@
         <span class="digit" id="count">00</span>
       </div>
       <div id="timer-buttons">
-        <button class="btn btn-primary" type="button" id="start"><i class="fa-solid fa-play"></i> Start</button>
-        <button class="btn btn-primary" type="button" id="pause"><i class="fa-solid fa-pause"></i> Pause</button>
-        <button class="btn btn-primary" type="button" id="stop"><i class="fa-solid fa-stop"></i> Stop</button>
+      <div class="row mt-3">
+        <div class="col-md-6 col-6">
+          <button id="leftbutton" class="btn btn-lg btn-primary w-100" style="height:400px" type="button">Left</button>
+        </div>
+        <div class="col-md-6 col-6">
+          <button id="rightbutton" class="btn btn-lg btn-primary w-100" style="height:400px" type="button">Right</button>
+        </div>
       </div>
+      <div class="row mt-3">
+        <!-- <button class="btn btn-primary" type="button" id="start"><i class="fa-solid fa-play"></i> Start</button> -->
+        <div class="col-md-6 col-6">
+          <button class="btn btn-primary w-100" type="button" id="pause"><i class="fa-solid fa-pause"></i> Pause</button>
+        </div>
+        <div class="col-md-6 col-6">
+          <button class="btn btn-primary w-100" type="button" id="reset"><i class="fa-solid fa-refresh"></i> Reset</button>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-w-100">
+          <button class="btn btn-success w-100" type="button" id="submit"><i class="fa-solid fa-stop"></i> End Feed</button>
+        </div>
+      </div>
+      </div>
+  </div>
+</div>
+<div class = "card mt-3">
+  <div class = "card-body">
+  <h5 class="card-title">
+      Feed Log
+    </div>
+
+    <table id="data" class="table">
+      <thead>
+        <tr>
+          <th>Feed Start</th>
+          <th>Feed End</th>
+          <th>Duration</th>
+          <th>Breast</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for feed in feeds %}
+      <tr>
+        <td>{{ feed["start_time"].strftime("%Y-%m-%d %H:%M") }}</td>
+        <td>{{ feed["stop_time"].strftime("%Y-%m-%d %H:%M") }}</td>
+        <td>{{ feed["duration"]  }}</td>
+        <td>{{ feed["breast"] }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
   </div>
 </div>
 
@@ -30,8 +77,6 @@
 
 <div class="container">
   <div class="d-grid gap-2 d-md-block">
-    <button class="btn btn-primary" type="button">Left</button>
-    <button class="btn btn-primary" type="button">Right</button>
   </div>
 
   <div class="d-grid gap-2 d-md-block">
@@ -42,17 +87,27 @@
 
 {% block scripts %}
 <script>
-let startBtn = document.getElementById("start");
 let pauseBtn = document.getElementById("pause");
-let stopBtn = document.getElementById("stop");
+let leftBtn = document.getElementById("leftbutton");
+let rightBtn = document.getElementById("rightbutton");
+let resetBtn = document.getElementById("reset");
+let submitBtn = document.getElementById("submit");
 
 let hour = 00;
 let minute = 00;
 let second = 00;
 let count = 00;
+let breast="";
 
-startBtn.addEventListener('click', function() {
+leftBtn.addEventListener('click', function() {
   timer = true;
+  breast = "left";
+  stopWatch();
+})
+
+rightBtn.addEventListener('click', function() {
+  timer = true;
+  breast = "right";
   stopWatch();
 })
 
@@ -60,27 +115,17 @@ pauseBtn.addEventListener('click', function() {
   timer = false;
 })
 
+resetBtn.addEventListener('click', function() {
+  timer = false;
+  count = 0;
+  second = 0;
+  minute = 0;
+  hour = 0;
+  
+  setWatch(0, 0, 0, 0);
+})
 
-function stopWatch () {
-  if (timer) {
-    count++;
-
-    if (count == 100) {
-      second++;
-      count = 0;
-    }
-
-    if (second == 60) {
-      minute ++;
-      second = 0;
-    }
-
-    if (minute == 60) {
-      hour++;
-      minute = 0;
-      secod = 0;
-    }
-
+function setWatch(hour, minute, second, count) {
     let hrString = hour;
     let minString = minute;
     let secString = second;
@@ -106,8 +151,60 @@ function stopWatch () {
     document.getElementById("min").innerHTML = minString;
     document.getElementById("sec").innerHTML = secString;
     document.getElementById("count").innerHTML = countString;
+}
+
+function stopWatch () {
+  if (timer) {
+    count++;
+
+    if (count == 100) {
+      second++;
+      count = 0;
+    }
+
+    if (second == 60) {
+      minute ++;
+      second = 0;
+    }
+
+    if (minute == 60) {
+      hour++;
+      minute = 0;
+      secod = 0;
+    }
+
+    setWatch(hour, minute, second, count);
     setTimeout(stopWatch, 10);
   }
 }
+
+submitBtn.addEventListener('click', function() {
+  timer=false;
+  const submit_url = {{ url_for("feeds.submit")|tojson }}  
+  console.log(submit_url)
+  let data = new FormData()
+  data.append("hour", hour)
+  data.append("minute", minute)
+  data.append("second", second)
+  data.append("count", count)
+  data.append("breast", breast)
+
+  // clear the watch
+  setWatch(0,0,0,0);
+
+  console.log(data)
+  fetch(submit_url, {
+    "method":"POST",
+    "body": data,
+  }).then(data)
+})
+
 </script>
+
+
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+  </script>
 {% endblock %}

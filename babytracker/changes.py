@@ -21,7 +21,7 @@ def index():
         return redirect(url_for("changes.index"))
 
     changes = db.execute(
-        "SELECT change_type, change_time from changes ORDER BY id DESC"
+        "SELECT change_type, change_time FROM changes ORDER BY id DESC"
     ).fetchall()
 
     return render_template("changes/index.html", changes=changes)

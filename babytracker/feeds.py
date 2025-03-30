@@ -1,7 +1,32 @@
-from flask import (Blueprint, g, render_template)
+from flask import (Blueprint, render_template, request, url_for, redirect)
+from babytracker.db import get_db
+from datetime import (datetime, timedelta)
 
-bp = Blueprint("feeds", __name__, url_prefix = "/feeds")
+bp = Blueprint("feeds", __name__, url_prefix="/feeds")
+
 
 @bp.route("/")
 def index():
-    return render_template("feeds/index.html")
+    db = get_db()
+    feeds = db.execute(
+        "SELECT start_time, stop_time, duration, breast FROM feeds ORDER BY id DESC"
+    ).fetchall()
+    return render_template("feeds/index.html", feeds=feeds)
+
+
+@bp.route("/submit", methods=["POST"])
+def submit():
+    db = get_db()
+    feed_end = datetime.now()
+    feed_duration = timedelta(hours=int(request.form["hour"]),
+                              minutes=int(request.form["minute"]),
+                              seconds=int(request.form["second"]),
+                              microseconds=int(request.form["count"]))
+    feed_start = feed_end - feed_duration
+    breast = request.form["breast"]
+    db.execute("INSERT INTO feeds (start_time, stop_time, breast, duration)"
+               " VALUES (?, ?, ?, ?)",
+               (feed_start, feed_end, breast, str(feed_duration)))
+    db.commit()
+
+    return redirect(url_for("feeds.index"))

@@ -7,7 +7,7 @@
 
 <div class="card">
   <div class="card-body">
-    <h5 class="card-title">Test</h5>
+    <h5 class="card-title">Log a Feed</h5>
       <div id="timer" class="h2 text-center">
         <span class="digit" id="hr">00</span>
         <span class="txt"> : </span>
@@ -47,7 +47,7 @@
   <div class = "card-body">
   <h5 class="card-title">
       Feed Log
-    </div>
+    </h5>
 
     <table id="data" class="table">
       <thead>
@@ -204,7 +204,9 @@ submitBtn.addEventListener('click', function() {
 
   <script>
     $(document).ready(function () {
-      $('#data').DataTable();
+$('#data').DataTable({
+  "sort":false
+});
     });
   </script>
 {% endblock %}

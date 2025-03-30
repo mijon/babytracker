@@ -59,7 +59,7 @@
         </tr>
       </thead>
       <tbody>
-      {% for feed in feeds %}
+      {% for feed in feedlog %}
       <tr>
         <td>{{ feed["start_time"].strftime("%Y-%m-%d %H:%M") }}</td>
         <td>{{ feed["stop_time"].strftime("%Y-%m-%d %H:%M") }}</td>
@@ -180,7 +180,7 @@ function stopWatch () {
 
 submitBtn.addEventListener('click', function() {
   timer=false;
-  const submit_url = {{ url_for("feeds.submit")|tojson }}  
+  const submit_url = {{ url_for("feeds.index")|tojson }}  
   console.log(submit_url)
   let data = new FormData()
   data.append("hour", hour)

@@ -8,6 +8,7 @@
 <div class="card">
   <div class="card-body">
     <h5 class="card-title">Log a Feed</h5>
+    <p>Last feed: {{ moment(last_feed).fromNow() }}</p>
       <div id="timer" class="h2 text-center">
         <span class="digit" id="hr">00</span>
         <span class="txt"> : </span>
@@ -205,7 +206,6 @@ submitBtn.addEventListener('click', function() {
   <script>
     $(document).ready(function () {
 $('#data').DataTable({
-  "sort":false
 });
     });
   </script>

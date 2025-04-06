@@ -28,10 +28,12 @@ def index():
         return redirect(url_for("feeds.index"))
 
     feedlog = db.execute(
-        "SELECT start_time, stop_time, duration, breast FROM feeds ORDER BY id DESC"
+        "SELECT start_time, stop_time, duration, breast FROM feeds ORDER BY start_time DESC"
     ).fetchall()
 
     display_timezone = get_timezone()
+    last_feed = feedlog[0]["start_time"]
+
     new_feedlog = []
     for row in feedlog:
         new_feedlog.append(
@@ -41,4 +43,4 @@ def index():
              "breast": row["breast"]}
         )
 
-    return render_template("feeds/index.html", feedlog=new_feedlog)
+    return render_template("feeds/index.html", feedlog=new_feedlog, last_feed=last_feed)

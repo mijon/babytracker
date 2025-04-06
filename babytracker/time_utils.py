@@ -3,7 +3,8 @@ import pytz
 
 
 def utc_timestamp():
-    return (datetime.now(tz=timezone.utc).isoformat())
+    # return (datetime.now(tz=timezone.utc).isoformat())
+    return datetime.now(tz=timezone.utc)
 
 
 def timestamp_to_tz(timestamp, tz):

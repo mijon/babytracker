@@ -33,6 +33,7 @@ def index():
 
     display_timezone = get_timezone()
     last_feed = feedlog[0]["start_time"]
+    last_feed_side = feedlog[0]["breast"]
 
     new_feedlog = []
     for row in feedlog:
@@ -43,4 +44,6 @@ def index():
              "breast": row["breast"]}
         )
 
-    return render_template("feeds/index.html", feedlog=new_feedlog, last_feed=last_feed)
+    return render_template("feeds/index.html", feedlog=new_feedlog,
+                           last_feed=last_feed,
+                           last_feed_side=last_feed_side)

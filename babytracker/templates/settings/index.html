@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1>{% block title %}Settings{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Settings Inputs</h5>
+    <label for="tzselect" class="form-label">Display Timezone</label>
+    <select class="form-select" id="tzselect" name="tzselect">
+      {% for tz in timezones %}
+        {% if tz == current_timezone %}
+          <option selected>{{ tz }}</option>
+        {% else %}
+          <option>{{ tz }}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+
+    <button class="btn btn-primary mt-3" type="submit">Submit</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

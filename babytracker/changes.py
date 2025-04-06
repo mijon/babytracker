@@ -1,6 +1,7 @@
 from flask import (Blueprint, render_template, request, url_for, redirect)
 from babytracker.db import get_db
-from datetime import datetime
+from babytracker.settings import get_timezone
+import babytracker.time_utils as tu
 
 bp = Blueprint("changes", __name__, url_prefix="/changes")
 
@@ -12,7 +13,8 @@ def index():
     if request.method == "POST":
         change_type = request.form["change-options"]
 
-        timestamp = datetime.now().isoformat()
+        # timestamp = datetime.now().isoformat()
+        timestamp = tu.utc_timestamp()
         db.execute(
             "INSERT INTO changes (change_type, change_time)"
             " VALUES (?, ?)",
@@ -24,4 +26,13 @@ def index():
         "SELECT change_type, change_time FROM changes ORDER BY id DESC"
     ).fetchall()
 
-    return render_template("changes/index.html", changes=changes)
+    display_timezone = get_timezone()
+
+    new_changes = []
+    for row in changes:
+        # row["change_time"] = tu.timestamp_to_tz(
+        #     row["change_time"], display_timezone)
+        new_changes.append({"change_time": tu.timestamp_to_tz(row["change_time"], display_timezone),
+                            "change_type": row["change_type"]})
+
+    return render_template("changes/index.html", changes=new_changes)

@@ -7,6 +7,7 @@
 <div class="card">
   <div class="card-body">
     <h5 class="card-title">Settings Inputs</h5>
+    <form class="form" method="post">
     <label for="tzselect" class="form-label">Display Timezone</label>
     <select class="form-select" id="tzselect" name="tzselect">
       {% for tz in timezones %}
@@ -17,8 +18,10 @@
         {% endif %}
       {% endfor %}
     </select>
+    
 
     <button class="btn btn-primary mt-3" type="submit">Submit</button>
+    </form>
   </div>
 </div>
 {% endblock %}

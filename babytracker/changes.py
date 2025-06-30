@@ -11,6 +11,8 @@ bp = Blueprint("changes", __name__, url_prefix="/changes")
 def index():
     db = get_db()
 
+    display_timezone = get_timezone()
+
     if request.method == "POST":
         change_type = request.form["change-options"]
 
@@ -22,7 +24,9 @@ def index():
             (change_type, timestamp))
         db.commit()
 
-        flash(f"New {change_type} change added for {timestamp}")
+        timestamp_display = tu.timestamp_to_tz(
+            timestamp, display_timezone).strftime("%H:%M")
+        flash(f"New '{change_type}' change added for {timestamp_display}")
 
         return redirect(url_for("changes.index"))
 
@@ -30,11 +34,11 @@ def index():
         "SELECT change_type, change_time FROM changes ORDER BY id DESC"
     ).fetchall()
 
-    display_timezone = get_timezone()
-
     new_changes = []
     for row in changes:
-        new_changes.append({"change_time": tu.timestamp_to_tz(row["change_time"], display_timezone),
-                            "change_type": row["change_type"]})
+        new_changes.append(
+            {"change_time": tu.timestamp_to_tz(row["change_time"],
+                                               display_timezone),
+             "change_type": row["change_type"]})
 
     return render_template("changes/index.html", changes=new_changes)

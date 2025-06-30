@@ -1,4 +1,5 @@
-from flask import (Blueprint, render_template, request, url_for, redirect)
+from flask import (Blueprint, flash, render_template,
+                   request, url_for, redirect)
 from babytracker.db import get_db
 from babytracker.settings import get_timezone
 import babytracker.time_utils as tu
@@ -20,6 +21,9 @@ def index():
             " VALUES (?, ?)",
             (change_type, timestamp))
         db.commit()
+
+        flash(f"New {change_type} change added for {timestamp}")
+
         return redirect(url_for("changes.index"))
 
     changes = db.execute(
@@ -30,8 +34,6 @@ def index():
 
     new_changes = []
     for row in changes:
-        # row["change_time"] = tu.timestamp_to_tz(
-        #     row["change_time"], display_timezone)
         new_changes.append({"change_time": tu.timestamp_to_tz(row["change_time"], display_timezone),
                             "change_type": row["change_type"]})
 
